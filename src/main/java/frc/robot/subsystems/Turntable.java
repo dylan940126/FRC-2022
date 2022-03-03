@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.wpilibj.Encoder;
@@ -25,7 +24,7 @@ public class Turntable extends SubsystemBase {
     }
 
     public boolean turnTo(double direction) {
-        setPower((direction - getDirection()) / 20);
+        setPower(MyMath.distanceToPower(direction - getDirection()) / 5);
         return direction - getDirection() < 1;
     }
 

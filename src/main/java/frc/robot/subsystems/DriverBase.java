@@ -3,9 +3,9 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.kauailabs.navx.frc.AHRS;
 
-import edu.wpi.first.wpilibj.ADIS16448_IMU;
-import edu.wpi.first.wpilibj.ADIS16448_IMU.IMUAxis;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -14,7 +14,7 @@ public class DriverBase extends SubsystemBase {
     public static final VictorSPX left_victor = new VictorSPX(Constants.left_victor_ID);
     public static final TalonSRX right_talon = new TalonSRX(Constants.right_talon_ID);
     public static final VictorSPX right_victor = new VictorSPX(Constants.right_victor_ID);
-    public static final ADIS16448_IMU imu = new ADIS16448_IMU();
+    public static final AHRS imu = new AHRS(SPI.Port.kMXP);
     private double startDirection;
 
     public DriverBase() {
@@ -24,7 +24,6 @@ public class DriverBase extends SubsystemBase {
         right_victor.follow(right_talon);
         right_victor.setInverted(true);
         right_talon.setInverted(true);
-        imu.setYawAxis(IMUAxis.kZ);
         startDirection = imu.getAngle();
     }
 
@@ -39,7 +38,7 @@ public class DriverBase extends SubsystemBase {
     }
 
     public void drive(double forward_power, double turn_power) {
-        tankDrive(forward_power - turn_power, forward_power + turn_power);
+        tankDrive(forward_power + turn_power, forward_power - turn_power);
     }
 
     public void follow(double power, double turn_power) {
@@ -49,7 +48,7 @@ public class DriverBase extends SubsystemBase {
     }
 
     public boolean turnTo(double direction) {
-        drive(0, (getHeading() - direction) / 100);
+        drive(0, MyMath.distanceToPower(direction - getHeading()) / 19);
         return Math.abs(direction - getHeading()) < 2;
     }
 
@@ -58,10 +57,10 @@ public class DriverBase extends SubsystemBase {
     }
 
     public double getHeading() {
-        return -(imu.getAngle() - startDirection);
+        return imu.getAngle() - startDirection;
     }
 
-    public void resetHeading(double direction) {
+    public void setHeading(double direction) {
         startDirection = imu.getAngle() + direction;
     }
 
