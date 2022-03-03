@@ -9,15 +9,15 @@ import frc.robot.Constants;
 public class Intake extends SubsystemBase {
     public static final VictorSPX intake = new VictorSPX(Constants.intake_ID);
 
-    public void charge() {
+    public static void charge() {
         intake.set(ControlMode.PercentOutput, 1);
     }
 
-    public void discharge() {
+    public static void discharge() {
         intake.set(ControlMode.PercentOutput, -1);
     }
 
-    public void stop() {
+    public static void stop() {
         intake.set(ControlMode.PercentOutput, 0);
     }
 

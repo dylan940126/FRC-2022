@@ -15,7 +15,7 @@ public class DriverBase extends SubsystemBase {
     public static final TalonSRX right_talon = new TalonSRX(Constants.right_talon_ID);
     public static final VictorSPX right_victor = new VictorSPX(Constants.right_victor_ID);
     public static final AHRS imu = new AHRS(SPI.Port.kMXP);
-    private double startDirection;
+    private static double startDirection;
 
     public DriverBase() {
         left_victor.follow(left_talon);
@@ -27,7 +27,7 @@ public class DriverBase extends SubsystemBase {
         startDirection = imu.getAngle();
     }
 
-    public void tankDrive(double left_power, double right_power) {
+    public static void tankDrive(double left_power, double right_power) {
         double k = Math.max(Math.abs(left_power), Math.abs(right_power));
         if (k > 1) {
             left_power /= k;
@@ -37,42 +37,34 @@ public class DriverBase extends SubsystemBase {
         right_talon.set(ControlMode.PercentOutput, right_power);
     }
 
-    public void drive(double forward_power, double turn_power) {
+    public static void drive(double forward_power, double turn_power) {
         tankDrive(forward_power + turn_power, forward_power - turn_power);
     }
 
-    public void follow(double power, double turn_power) {
+    public static void follow(double power, double turn_power) {
         if (turn_power > 0.4)
             power = Math.min(power, turn_power * 0.7);
         drive(power, turn_power);
     }
 
-    public boolean turnTo(double direction) {
+    public static boolean turnTo(double direction) {
         drive(0, MyMath.distanceToPower(direction - getHeading()) / 19);
         return Math.abs(direction - getHeading()) < 2;
     }
 
-    public void stop() {
+    public static void stop() {
         tankDrive(0, 0);
     }
 
-    public double getHeading() {
+    public static double getHeading() {
         return imu.getAngle() - startDirection;
     }
 
-    public void setHeading(double direction) {
+    public static void setHeading(double direction) {
         startDirection = imu.getAngle() + direction;
     }
 
-    public void restartIMU() {
+    public static void restartIMU() {
         imu.calibrate();
-    }
-
-    public TalonSRX getLeftTalon() {
-        return left_talon;
-    }
-
-    public TalonSRX getRightTalon() {
-        return right_talon;
     }
 }
