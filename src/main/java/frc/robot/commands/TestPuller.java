@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
@@ -12,7 +13,7 @@ public class TestPuller extends CommandBase {
 
     @Override
     public void execute() {
-        Robot.m_gamepad1.update();
+        SmartDashboard.putNumber("time", RobotController.getFPGATime());
         SmartDashboard.putBoolean("y", Robot.m_gamepad1.y);
         if (Robot.m_gamepad1.y)
             Robot.m_puller.setPower(0.5);

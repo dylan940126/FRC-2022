@@ -4,14 +4,13 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.AutoTwoBalls;
+import frc.robot.commands.TeleF1;
+import frc.robot.commands.TestPuller;
 import frc.robot.subsystems.Conveyer;
 import frc.robot.subsystems.DriverBase;
 import frc.robot.subsystems.Gamepad;
@@ -41,11 +40,6 @@ public class Robot extends TimedRobot {
     public static final Gamepad m_gamepad1 = new Gamepad(0);
 
     private final SendableChooser<String> m_autoChooser = new SendableChooser<>();
-    private Command m_autonomousCommand;
-    private Command m_teleopCommand;
-    private Command m_testCommand;
-
-    private RobotContainer m_robotContainer;
 
     /**
      * This function is run when the robot is first started up and should be used
@@ -59,7 +53,6 @@ public class Robot extends TimedRobot {
         // autonomous chooser on the dashboard.
         CommandScheduler.getInstance().cancelAll();
         // RobotContainer.m_DriverBase.restartIMU();
-        m_robotContainer = new RobotContainer();
     }
 
     /**
@@ -102,11 +95,11 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
-        m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+        RobotContainer.setCommand(new AutoTwoBalls());
 
         // schedule the autonomous command (example)
-        if (m_autonomousCommand != null) {
-            m_autonomousCommand.schedule();
+        if (RobotContainer.m_command != null) {
+            RobotContainer.m_command.schedule();
         }
     }
 
@@ -122,12 +115,9 @@ public class Robot extends TimedRobot {
         // teleop starts running. If you want the autonomous to
         // continue until interrupted by another command, remove
         // this line or comment it out.
-        if (m_autonomousCommand != null) {
-            m_autonomousCommand.cancel();
-        }
-        m_teleopCommand = m_robotContainer.getTeleopCommand();
-        if (m_teleopCommand != null) {
-            m_teleopCommand.schedule();
+        RobotContainer.setCommand(new TeleF1());
+        if (RobotContainer.m_command != null) {
+            RobotContainer.m_command.schedule();
         }
     }
 
@@ -138,15 +128,17 @@ public class Robot extends TimedRobot {
 
     @Override
     public void testInit() {
-        // Cancels all running commands at the start of test mode.
-        Robot.m_turntable.resetDirection();
-        SmartDashboard.putNumber("dir", 0);
+        // RobotContainer.setCommand(new TestPuller());
+        DriverBase.imu.reset();
+        m_driverBase.setHeading(0);
+        DriverBase.imu.resetDisplacement();
     }
 
     /** This function is called periodically during test mode. */
     @Override
     public void testPeriodic() {
-        Robot.m_turntable.turnTo(SmartDashboard.getNumber("dir", 0));
+        SmartDashboard.putNumber("angle", m_driverBase.getHeading());
+        m_driverBase.turnTo(90);
     }
 
     public static void stopAll() {

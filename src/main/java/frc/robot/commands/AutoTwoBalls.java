@@ -33,7 +33,7 @@ public class AutoTwoBalls extends AutoTemplate {
                 Robot.m_shooter.stop();
                 Robot.m_turntable.setPower(0);
                 Robot.m_conveyer.stop();
-                Robot.m_driverBase.drive(0, 0.3);
+                Robot.m_driverBase.drive(0, -0.3);
                 if (getTimeMs() > 555)
                     NextState();
                 break;
