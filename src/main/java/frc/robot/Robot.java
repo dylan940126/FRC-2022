@@ -10,11 +10,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.AutoTwoBalls;
 import frc.robot.commands.TeleF1;
-import frc.robot.commands.TestPuller;
 import frc.robot.subsystems.Conveyer;
 import frc.robot.subsystems.DriverBase;
 import frc.robot.subsystems.Gamepad;
-import frc.robot.subsystems.GoalDetecter;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Puller;
 import frc.robot.subsystems.Shooter;
@@ -30,13 +28,6 @@ import frc.robot.subsystems.Turntable;
  * project.
  */
 public class Robot extends TimedRobot {
-    public static final Conveyer m_conveyer = new Conveyer();
-    public static final DriverBase m_driverBase = new DriverBase();
-    public static final GoalDetecter m_goalDetecter = new GoalDetecter();
-    public static final Intake m_intake = new Intake();
-    public static final Puller m_puller = new Puller();
-    public static final Shooter m_shooter = new Shooter();
-    public static final Turntable m_turntable = new Turntable();
     public static final Gamepad m_gamepad1 = new Gamepad(0);
 
     private final SendableChooser<String> m_autoChooser = new SendableChooser<>();
@@ -130,23 +121,23 @@ public class Robot extends TimedRobot {
     public void testInit() {
         // RobotContainer.setCommand(new TestPuller());
         DriverBase.imu.reset();
-        m_driverBase.setHeading(0);
+        DriverBase.setHeading(0);
         DriverBase.imu.resetDisplacement();
     }
 
     /** This function is called periodically during test mode. */
     @Override
     public void testPeriodic() {
-        SmartDashboard.putNumber("angle", m_driverBase.getHeading());
-        m_driverBase.turnTo(90);
+        SmartDashboard.putNumber("angle", DriverBase.getHeading());
+        DriverBase.turnTo(90);
     }
 
     public static void stopAll() {
-        m_conveyer.stop();
-        m_driverBase.stop();
-        m_intake.stop();
-        m_puller.stop();
-        m_shooter.stop();
-        m_turntable.stop();
+        Conveyer.stop();
+        DriverBase.stop();
+        Intake.stop();
+        Puller.stop();
+        Shooter.stop();
+        Turntable.stop();
     }
 }
