@@ -6,18 +6,18 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class GoalDetecter extends SubsystemBase {
-    private NetworkTable table;
-    private double tv;
-    private double tx;
-    private double ty;
-    private double distance;
+    private static NetworkTable table;
+    private static double tv;
+    private static double tx;
+    private static double ty;
+    private static double distance;
 
     public GoalDetecter() {
         NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(0);
         update();
     }
 
-    public void update() {
+    public static void update() {
         table = NetworkTableInstance.getDefault().getTable("limelight");
         tv = table.getEntry("tv").getDouble(0);
         tx = table.getEntry("tx").getDouble(0);
@@ -28,15 +28,15 @@ public class GoalDetecter extends SubsystemBase {
                 / Math.tan(Math.toRadians(Constants.camera_elevation_degree + ty));
     }
 
-    public double getDistance() {
+    public static double getDistance() {
         return distance;
     }
 
-    public double getX() {
+    public static double getX() {
         return tx;
     }
 
-    public NetworkTable getTable() {
+    public static NetworkTable getTable() {
         return table;
     }
 

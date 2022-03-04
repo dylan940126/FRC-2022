@@ -15,27 +15,27 @@ public class Puller extends SubsystemBase {
         left_pull.setInverted(true);
     }
 
-    public void setPower(double power) {
+    public static void setPower(double power) {
         setLeft(power);
         setRight(power);
     }
 
-    public void resetEncoder() {
+    public static void resetEncoder() {
         left_pull.setSelectedSensorPosition(0);
         right_pull.setSelectedSensorPosition(0);
     }
 
-    public void stop() {
+    public static void stop() {
         setPower(0);
     }
 
-    public void setLeft(double power) {
+    public static void setLeft(double power) {
         // if (left_pull.getSelectedSensorPosition() > 326840)
         left_pull.set(ControlMode.PercentOutput, power);
         SmartDashboard.putNumber("leftPullerEncoder", left_pull.getSelectedSensorPosition());
     }
 
-    public void setRight(double power) {
+    public static void setRight(double power) {
         right_pull.set(ControlMode.PercentOutput, power);
         SmartDashboard.putNumber("rightPullerEncoder", right_pull.getSelectedSensorPosition());
     }

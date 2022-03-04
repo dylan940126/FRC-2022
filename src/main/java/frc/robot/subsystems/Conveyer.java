@@ -9,19 +9,15 @@ import frc.robot.Constants;
 public class Conveyer extends SubsystemBase {
     public static final VictorSPX conveyer = new VictorSPX(Constants.conveyer_ID);
 
-    public void feed() {
+    public static void feed() {
         conveyer.set(ControlMode.PercentOutput, 0.7);
     }
 
-    public void retain() {
+    public static void retain() {
         conveyer.set(ControlMode.PercentOutput, -0.4);
     }
 
-    public void stop() {
+    public static void stop() {
         conveyer.set(ControlMode.PercentOutput, 0);
-    }
-
-    public VictorSPX getConveyer() {
-        return conveyer;
     }
 }

@@ -10,14 +10,14 @@ import frc.robot.Constants;
 public class Shooter extends SubsystemBase {
     public static final TalonFX left_shooter = new TalonFX(Constants.left_shooter_ID),
             right_shooter = new TalonFX(Constants.right_shooter_ID);
-    private double I = 0, last_err = 0;
+    private static double I = 0, last_err = 0;
 
     public Shooter() {
         left_shooter.setInverted(true);
         right_shooter.follow(left_shooter);
     }
 
-    public void fire(double velocity) {
+    public static void fire(double velocity) {
         // double currentVelocity = left_shooter.getSelectedSensorVelocity();
         double err = velocity - left_shooter.getSelectedSensorVelocity();
         I += err;
@@ -33,12 +33,12 @@ public class Shooter extends SubsystemBase {
         last_err = err;
     }
 
-    public void stop() {
+    public static void stop() {
         left_shooter.set(ControlMode.PercentOutput, 0);
         I = 0;
     }
 
-    public TalonFX getShooter() {
+    public static TalonFX getShooter() {
         return left_shooter;
     }
 }

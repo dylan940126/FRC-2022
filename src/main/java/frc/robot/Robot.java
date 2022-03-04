@@ -4,18 +4,15 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.AutoTwoBalls;
+import frc.robot.commands.TeleF1;
 import frc.robot.subsystems.Conveyer;
 import frc.robot.subsystems.DriverBase;
 import frc.robot.subsystems.Gamepad;
-import frc.robot.subsystems.GoalDetecter;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Puller;
 import frc.robot.subsystems.Shooter;
@@ -31,21 +28,9 @@ import frc.robot.subsystems.Turntable;
  * project.
  */
 public class Robot extends TimedRobot {
-    public static final Conveyer m_conveyer = new Conveyer();
-    public static final DriverBase m_driverBase = new DriverBase();
-    public static final GoalDetecter m_goalDetecter = new GoalDetecter();
-    public static final Intake m_intake = new Intake();
-    public static final Puller m_puller = new Puller();
-    public static final Shooter m_shooter = new Shooter();
-    public static final Turntable m_turntable = new Turntable();
     public static final Gamepad m_gamepad1 = new Gamepad(0);
 
     private final SendableChooser<String> m_autoChooser = new SendableChooser<>();
-    private Command m_autonomousCommand;
-    private Command m_teleopCommand;
-    private Command m_testCommand;
-
-    private RobotContainer m_robotContainer;
 
     /**
      * This function is run when the robot is first started up and should be used
@@ -59,7 +44,6 @@ public class Robot extends TimedRobot {
         // autonomous chooser on the dashboard.
         CommandScheduler.getInstance().cancelAll();
         // RobotContainer.m_DriverBase.restartIMU();
-        m_robotContainer = new RobotContainer();
     }
 
     /**
@@ -102,11 +86,11 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
-        m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+        RobotContainer.setCommand(new AutoTwoBalls());
 
         // schedule the autonomous command (example)
-        if (m_autonomousCommand != null) {
-            m_autonomousCommand.schedule();
+        if (RobotContainer.m_command != null) {
+            RobotContainer.m_command.schedule();
         }
     }
 
@@ -122,12 +106,9 @@ public class Robot extends TimedRobot {
         // teleop starts running. If you want the autonomous to
         // continue until interrupted by another command, remove
         // this line or comment it out.
-        if (m_autonomousCommand != null) {
-            m_autonomousCommand.cancel();
-        }
-        m_teleopCommand = m_robotContainer.getTeleopCommand();
-        if (m_teleopCommand != null) {
-            m_teleopCommand.schedule();
+        RobotContainer.setCommand(new TeleF1());
+        if (RobotContainer.m_command != null) {
+            RobotContainer.m_command.schedule();
         }
     }
 
@@ -138,23 +119,25 @@ public class Robot extends TimedRobot {
 
     @Override
     public void testInit() {
-        // Cancels all running commands at the start of test mode.
-        Robot.m_turntable.resetDirection();
-        SmartDashboard.putNumber("dir", 0);
+        // RobotContainer.setCommand(new TestPuller());
+        DriverBase.imu.reset();
+        DriverBase.setHeading(0);
+        DriverBase.imu.resetDisplacement();
     }
 
     /** This function is called periodically during test mode. */
     @Override
     public void testPeriodic() {
-        Robot.m_turntable.turnTo(SmartDashboard.getNumber("dir", 0));
+        SmartDashboard.putNumber("angle", DriverBase.getHeading());
+        DriverBase.turnTo(90);
     }
 
     public static void stopAll() {
-        m_conveyer.stop();
-        m_driverBase.stop();
-        m_intake.stop();
-        m_puller.stop();
-        m_shooter.stop();
-        m_turntable.stop();
+        Conveyer.stop();
+        DriverBase.stop();
+        Intake.stop();
+        Puller.stop();
+        Shooter.stop();
+        Turntable.stop();
     }
 }

@@ -6,10 +6,8 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.commands.AutoTwoBalls;
-import frc.robot.commands.TeleF1;
-import frc.robot.commands.TestPuller;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -23,9 +21,7 @@ import frc.robot.commands.TestPuller;
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     // public Gamepad gamepad2 = new Gamepad(1);
-    private TeleF1 m_F1Control = new TeleF1();
-    private AutoTwoBalls m_AutoTwoBalls = new AutoTwoBalls();
-    private TestPuller m_TestPuller = new TestPuller();
+    public static Command m_command;
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -51,15 +47,11 @@ public class RobotContainer {
      *
      * @return the command to run in autonomous
      */
-    public Command getAutonomousCommand() {
-        return m_AutoTwoBalls;
-    }
-
-    public Command getTeleopCommand() {
-        return m_F1Control;
-    }
-
-    public Command getTestCommand() {
-        return m_TestPuller;
+    public static void startCommand(Command command) {
+        if (m_command != null)
+            m_command.cancel();
+        m_command = command;
+        SmartDashboard.putString("command", command.getName());
+        m_command.initialize();
     }
 }
