@@ -47,7 +47,7 @@ public class RobotContainer {
      *
      * @return the command to run in autonomous
      */
-    public static void setCommand(Command command) {
+    public static void startCommand(Command command) {
         if (m_command != null)
             m_command.cancel();
         m_command = command;

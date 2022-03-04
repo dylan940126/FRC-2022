@@ -41,14 +41,12 @@ public class DriverBase extends SubsystemBase {
         tankDrive(forward_power + turn_power, forward_power - turn_power);
     }
 
-    public static void follow(double power, double turn_power) {
-        if (turn_power > 0.4)
-            power = Math.min(power, turn_power * 0.7);
-        drive(power, turn_power);
+    public static void follow(double power, double direction) {
+        drive(power, MyMath.distanceToPower(direction - getHeading()) / 19);
     }
 
     public static boolean turnTo(double direction) {
-        drive(0, MyMath.distanceToPower(direction - getHeading()) / 19);
+        follow(0, direction);
         return Math.abs(direction - getHeading()) < 2;
     }
 
