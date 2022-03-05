@@ -28,7 +28,7 @@ public class Shooter extends SubsystemBase {
         double power = err * kp + I * ki + (err - last_err) * kd;
         left_shooter.set(ControlMode.PercentOutput, power / 19500);
         last_err = err;
-        return Math.abs(err) < 500;
+        return Math.abs(err) < 100;
     }
 
     public static boolean fire() {

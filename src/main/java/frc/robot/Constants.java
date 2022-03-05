@@ -36,5 +36,5 @@ public class Constants {
     public static final double shooter_ki = 0.06;
     public static final double shooter_kd = 2;
     public static final double perfect_shoot_distance = 450;
-    public static double velocity = 18000;
+    public static double velocity = 17850;
 }

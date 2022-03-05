@@ -1,8 +1,5 @@
 package frc.robot.commands;
 
-import java.sql.Driver;
-
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 import frc.robot.subsystems.Conveyer;
 import frc.robot.subsystems.DriverBase;
@@ -12,7 +9,6 @@ import frc.robot.subsystems.Turntable;
 public class AutoBack extends AutoTemplate {
     @Override
     public void initialize() {
-        DriverBase.setHeading(-22.5);
     }
 
     @Override

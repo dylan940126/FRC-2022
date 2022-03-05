@@ -45,6 +45,7 @@ public class Robot extends TimedRobot {
         RobotContainer.m_autoChooser.setDefaultOption("3balls", "3balls");
         RobotContainer.m_autoChooser.addOption("back", "back");
         RobotContainer.m_autoChooser.addOption("back&take", "back&take");
+        RobotContainer.m_autoChooser.addOption("nothing", "nothing");
         SmartDashboard.putData(RobotContainer.m_autoChooser);
         initAll();
     }
@@ -93,9 +94,6 @@ public class Robot extends TimedRobot {
         RobotContainer.startCommand(new AutoThreeBalls());
 
         // schedule the autonomous command (example)
-        if (RobotContainer.m_command != null) {
-            RobotContainer.m_command.schedule();
-        }
     }
 
     /** This function is called periodically during autonomous. */
@@ -121,11 +119,14 @@ public class Robot extends TimedRobot {
     @Override
     public void testInit() {
         // RobotContainer.setCommand(new TestPuller());
+        DriverBase.setHeading(-22.5);
+        SmartDashboard.putNumber("angle", -22.5);
     }
 
     /** This function is called periodically during test mode. */
     @Override
     public void testPeriodic() {
+        DriverBase.turnTo(SmartDashboard.getNumber("angle", 0));
     }
 
     public static void stopAll() {

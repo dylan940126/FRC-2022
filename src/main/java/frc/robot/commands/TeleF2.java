@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.subsystems.Conveyer;
@@ -11,13 +12,16 @@ import frc.robot.subsystems.Turntable;
 
 public class TeleF2 extends TeleTemplate {
     ButtonSwitch intakeSwitch = new ButtonSwitch();
+    ButtonSwitch aimSwitch = new ButtonSwitch();
 
     @Override
     public void initialize() {
+        aimSwitch.setState(true);
     }
 
     @Override
     public void execute() {
+        SmartDashboard.putBoolean("auto", aimSwitch.getState());
         DriverBase.drive(Robot.m_gamepad1.left_stick_y * 0.8,
                 Robot.m_gamepad1.right_stick_x * 0.6);
         if (Robot.m_gamepad1.y || Robot.m_gamepad2.left_bumper) {
@@ -29,7 +33,12 @@ public class TeleF2 extends TeleTemplate {
             Intake.stop();
         }
         if (Robot.m_gamepad1.right_bumper) {
-            if (DriverBase.autoAim(false) || Robot.m_gamepad1.left_bumper) {
+            boolean ready = false;
+            if (aimSwitch.update(Robot.m_gamepad1.right_trigger > 0.5))
+                ready = DriverBase.autoAim(false);
+            else
+                Shooter.fire();
+            if (ready || Robot.m_gamepad1.left_bumper) {
                 Intake.charge();
                 Conveyer.feed();
             }

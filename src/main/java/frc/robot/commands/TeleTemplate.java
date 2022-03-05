@@ -23,6 +23,10 @@ public abstract class TeleTemplate extends CommandBase {
             return state;
         }
 
+        public void setState(boolean state) {
+            this.state = state;
+        }
+
         public boolean getState() {
             return state;
         }
