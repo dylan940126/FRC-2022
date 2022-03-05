@@ -10,7 +10,7 @@ public class Conveyer extends SubsystemBase {
     public static final VictorSPX conveyer = new VictorSPX(Constants.conveyer_ID);
 
     public static void feed() {
-        conveyer.set(ControlMode.PercentOutput, 0.7);
+        conveyer.set(ControlMode.PercentOutput, 0.4);
     }
 
     public static void retain() {

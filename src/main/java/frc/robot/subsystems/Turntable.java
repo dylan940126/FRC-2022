@@ -10,7 +10,7 @@ import frc.robot.Constants;
 public class Turntable extends SubsystemBase {
     public static final Encoder encoder = new Encoder(0, 1);
     public static final VictorSPX motor = new VictorSPX(Constants.turntable_ID);
-    private static double zero_position;
+    public static double zero_position;
 
     public Turntable() {
         resetDirection();
@@ -36,7 +36,15 @@ public class Turntable extends SubsystemBase {
         return (encoder.getDistance() - zero_position) / Constants.encoder_per_degree;
     }
 
+    public static void addDirection(double direction) {
+        zero_position += direction;
+    }
+
+    public static void setDirection(double direction) {
+        zero_position = encoder.getDistance() - direction * Constants.encoder_per_degree;
+    }
+
     public static void resetDirection() {
-        zero_position = encoder.getDistance() + 180 * Constants.encoder_per_degree;
+        setDirection(-180);
     }
 }

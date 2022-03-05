@@ -6,8 +6,12 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.AutoBack;
+import frc.robot.commands.AutoBackAndTake;
+import frc.robot.commands.AutoThreeBalls;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -22,6 +26,7 @@ public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     // public Gamepad gamepad2 = new Gamepad(1);
     public static Command m_command;
+    public static final SendableChooser<String> m_autoChooser = new SendableChooser<>();
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -52,6 +57,19 @@ public class RobotContainer {
             m_command.cancel();
         m_command = command;
         SmartDashboard.putString("command", command.getName());
-        m_command.initialize();
+        m_command.schedule();
+    }
+
+    public static Command getAutonomousCommand() {
+        switch (m_autoChooser.getSelected()) {
+            case "back":
+                return new AutoBack();
+            case "back&take":
+                return new AutoBackAndTake();
+            case "3balls":
+                return new AutoThreeBalls();
+            default:
+                return null;
+        }
     }
 }

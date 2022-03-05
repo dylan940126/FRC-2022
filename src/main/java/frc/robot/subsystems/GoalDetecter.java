@@ -28,6 +28,10 @@ public class GoalDetecter extends SubsystemBase {
                 / Math.tan(Math.toRadians(Constants.camera_elevation_degree + ty));
     }
 
+    public static boolean isDetected() {
+        return tv != 0;
+    }
+
     public static double getDistance() {
         return distance;
     }

@@ -41,12 +41,24 @@ public class DriverBase extends SubsystemBase {
         tankDrive(forward_power + turn_power, forward_power - turn_power);
     }
 
-    public static void follow(double power, double direction) {
-        drive(power, MyMath.distanceToPower(direction - getHeading()) / 19);
+    public static boolean autoAim(boolean turn) {
+        if (turn)
+            Turntable.setPower(GoalDetecter.getX() / 15);
+        else
+            Turntable.turnTo(-180);
+        if (GoalDetecter.isDetected())
+            DriverBase.drive(
+                    MyMath.distanceToPower(Constants.perfect_shoot_distance - GoalDetecter.getDistance())
+                            * (turn ? 1 : -1)                            / 39,
+                    MyMath.distanceToPower(Turntable.getDirection() + (turn ? 0 : 180) + GoalDetecter.getX()) / 17);
+        else
+            DriverBase.drive(0, -0.3);
+        return Shooter.fire() && Math.abs(Turntable.getDirection() + (turn ? 0 : 180) + GoalDetecter.getX()) < 0.5
+                && Math.abs(Constants.perfect_shoot_distance - GoalDetecter.getDistance()) < 20;
     }
 
     public static boolean turnTo(double direction) {
-        follow(0, direction);
+        drive(0, MyMath.distanceToPower(direction - getHeading()) / 25);
         return Math.abs(direction - getHeading()) < 2;
     }
 
@@ -59,7 +71,7 @@ public class DriverBase extends SubsystemBase {
     }
 
     public static void setHeading(double direction) {
-        startDirection = imu.getAngle() + direction;
+        startDirection = imu.getAngle() - direction;
     }
 
     public static void restartIMU() {
