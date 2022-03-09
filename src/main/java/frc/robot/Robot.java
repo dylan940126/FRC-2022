@@ -91,7 +91,11 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
+<<<<<<< Updated upstream
         RobotContainer.startCommand(new AutoThreeBalls());
+=======
+        RobotContainer.startCommand(RobotContainer.getAutonomousCommand());
+>>>>>>> Stashed changes
 
         // schedule the autonomous command (example)
     }

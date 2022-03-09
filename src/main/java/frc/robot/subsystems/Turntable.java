@@ -17,10 +17,14 @@ public class Turntable extends SubsystemBase {
     }
 
     public static void setPower(double power) {
-        if ((getDirection() >= 90 && power > 0) || (getDirection() <= -180 && power < 0))
+        boolean lock;
+        if ((getDirection() >= 45 && power > 0) || (getDirection() <= -180 && power < 0)) {
+            lock = true;
             stop();
-        else
+        } else {
+            lock = false;
             motor.set(ControlMode.PercentOutput, power);
+        }
     }
 
     public static boolean turnTo(double direction) {
