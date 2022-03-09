@@ -49,7 +49,11 @@ public class DriverBase extends SubsystemBase {
         if (GoalDetecter.isDetected())
             DriverBase.drive(
                     MyMath.distanceToPower(Constants.perfect_shoot_distance - GoalDetecter.getDistance())
+<<<<<<< Updated upstream
                             * (turn ? 1 : -1)                            / 39,
+=======
+                            * (turn ? 1 : -1) / 39,
+>>>>>>> Stashed changes
                     MyMath.distanceToPower(Turntable.getDirection() + (turn ? 0 : 180) + GoalDetecter.getX()) / 17);
         else
             DriverBase.drive(0, -0.3);
