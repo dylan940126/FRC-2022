@@ -30,10 +30,11 @@ public class Constants {
     public static final int intake_ID = 20;
     public static final double hub_height_cm = 264;// 264
     public static final double camera_height_cm = 58;
-    public static final double camera_elevation_degree = 28.248;
+    public static final double camera_elevation_degree = 27.5;
     public static final double encoder_per_degree = 5.66;
     public static final double shooter_kp = 1.1;
-    public static final double shooter_ki = 0.03;
+    public static final double shooter_ki = 0.06;
     public static final double shooter_kd = 2;
     public static final double perfect_shoot_distance = 450;
+    public static double velocity = 17850;
 }
